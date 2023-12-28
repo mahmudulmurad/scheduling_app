@@ -31,6 +31,10 @@ export class EmployeeCreateDTO {
   @IsEnum(Gender)
   @IsNotEmpty()
   gender: Gender;
+
+  @IsEnum(Roles)
+  @IsOptional()
+  role: Roles;
 }
 
 export class EmployeeUpdateDTO {
