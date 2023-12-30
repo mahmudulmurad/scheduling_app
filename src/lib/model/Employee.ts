@@ -39,7 +39,13 @@ const employeeSchema = new Schema({
     enum: Object.values(ActiveStatus),
     default: ActiveStatus.enabled,
     index: { name: "employee-isActive-idx", unique: false },
-  }
+  },
+  myEmployees: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Employee',
+    },
+  ],
 },
 {
   timestamps: true,

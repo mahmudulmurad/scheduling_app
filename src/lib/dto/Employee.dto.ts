@@ -2,6 +2,8 @@ import { Gender } from "../enum/Gender.enum";
 import { ActiveStatus } from "../enum/Active.enum";
 import { Roles } from "../enum/Role.enum";
 import {
+  ArrayMinSize,
+  IsArray,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -66,6 +68,21 @@ export class EmployeeUpdateDTO {
   @IsEnum(ActiveStatus)
   @IsOptional()
   isActive: ActiveStatus;
+
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsOptional()
+  myEmployees: string[];
 }
 
 export type EmployeeLoginDTO = Pick<EmployeeCreateDTO, "email" | "password">;
+export type EmployeeRoleDTO = Pick<EmployeeCreateDTO, "role">;
+
+export class EmployeeUntagDTO {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+}
+
+
+
