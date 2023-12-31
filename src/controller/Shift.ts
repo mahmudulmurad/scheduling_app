@@ -90,10 +90,7 @@ export const EmployeeShift = async (req: AuthRequest, res: Response) => {
 			query = { ...query, date: req.query.date };
 		}
 
-		const shifts = await Shift.find({ ...query, assignedEmployees: { $in: [id] } }).populate({
-			path: 'assignedEmployees',
-			select: '_id name email phone gender isActive role',
-		});
+		const shifts = await Shift.find({ ...query, assignedEmployees: { $in: [id] } }, { assignedEmployees: 0 });
 		res.status(200).json(successResponse(shifts, 'Shift fetched successful'));
 	} catch (error) {
 		res.status(500).json(errorResponse(error.message || 'Internal server error'));
@@ -160,8 +157,25 @@ export const AssignShiftToEmployee = async (req: Request, res: Response) => {
 	}
 };
 
-const slotValidity = (number: number, start: number, end: number): boolean => {
-	console.log(number, start, end);
+export const RemoveShiftFromEmployee = async (req: Request, res: Response) => {
+	try {
+		const id = req.params.id;
+		const { employeeId }: AssignEmployeeDto = req.body;
 
+		const removedShift = await Shift.findByIdAndUpdate(
+			{ _id: id },
+			{
+				$pull: { assignedEmployees: employeeId },
+			},
+			{ new: true }
+		);
+
+		res.status(200).json(successResponse(removedShift, 'Removed successfully'));
+	} catch (error) {
+		res.status(500).json(errorResponse(error.message || 'Internal server error'));
+	}
+};
+
+const slotValidity = (number: number, start: number, end: number): boolean => {
 	return number >= start && number <= end;
 };

@@ -7,6 +7,7 @@ import {
 	Delete,
 	EmployeeShift,
 	FindAll,
+	RemoveShiftFromEmployee,
 	SingleShift,
 	Update,
 } from '../controller/Shift';
@@ -20,5 +21,6 @@ router.get('/all', permission([Roles.ADMINISTRATOR, Roles.SUPERVISOR]), FindAll)
 router.get('/my-shift', permission([Roles.ADMINISTRATOR, Roles.EMPLOYEE]), EmployeeShift);
 router.get('/single/:id', permission([Roles.ADMINISTRATOR, Roles.SUPERVISOR]), SingleShift);
 router.patch('/assign/:id', permission([Roles.ADMINISTRATOR, Roles.SUPERVISOR]), AssignShiftToEmployee);
+router.patch('/remove/:id', permission([Roles.ADMINISTRATOR, Roles.SUPERVISOR]), RemoveShiftFromEmployee);
 
 export default router;

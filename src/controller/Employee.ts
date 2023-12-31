@@ -14,6 +14,9 @@ export const EmployeeList = async (req: AuthRequest, res: Response) => {
 			_id: {
 				$ne: userId,
 			},
+		}).populate({
+			path: 'myEmployees',
+			select: '_id name email phone gender isActive role',
 		});
 
 		res.status(200).json(successResponse(employeeList, 'Employee list fetched successfully'));
