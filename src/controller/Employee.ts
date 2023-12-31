@@ -6,6 +6,22 @@ import { successResponse } from '../lib/service/SuccessResponse';
 import { errorResponse } from '../lib/service/ErrorResponse';
 import AuthRequest from '../lib/decorator/request';
 
+export const EmployeeList = async (req: AuthRequest, res: Response) => {
+	try {
+		const userId = req.user.id;
+
+		const employeeList = await Employee.find({
+			_id: {
+				$ne: userId,
+			},
+		});
+
+		res.status(200).json(successResponse(employeeList, 'Employee list fetched successfully'));
+	} catch (error) {
+		res.status(500).json(errorResponse(error.message || 'Internal server error'));
+	}
+};
+
 export const MyProfile = async (req: AuthRequest, res: Response) => {
 	try {
 		const id = req.user.id;

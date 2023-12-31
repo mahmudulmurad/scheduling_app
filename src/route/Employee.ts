@@ -3,6 +3,7 @@ import { Roles } from '../lib/enum/Role.enum';
 import permission from '../middleware/Permission';
 import {
 	DeleteEmployee,
+	EmployeeList,
 	EmployeeRoleChange,
 	MyProfile,
 	TagEmployeeToSupervisor,
@@ -13,6 +14,7 @@ import {
 const router = express.Router();
 
 router.get('/me', permission([Roles.ADMINISTRATOR, Roles.EMPLOYEE, Roles.SUPERVISOR]), MyProfile);
+router.get('/list', permission([Roles.ADMINISTRATOR]), EmployeeList);
 router.patch('/update/:id', permission([Roles.ADMINISTRATOR, Roles.EMPLOYEE, Roles.SUPERVISOR]), UpdateEmployee);
 router.delete('/delete/:id', permission([Roles.ADMINISTRATOR]), DeleteEmployee);
 router.patch('/role-change/:id', permission([Roles.ADMINISTRATOR]), EmployeeRoleChange);
