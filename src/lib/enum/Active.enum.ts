@@ -1,4 +1,4 @@
 export enum ActiveStatus {
-  disabled = 0,
-  enabled = 1,
+	Active = 'Active',
+	Inactive = 'Inactive',
 }
