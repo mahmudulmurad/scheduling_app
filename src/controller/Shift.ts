@@ -4,6 +4,8 @@ import { Shift } from '../lib/model/Shift';
 import { successResponse } from '../lib/service/SuccessResponse';
 import { errorResponse } from '../lib/service/ErrorResponse';
 import AuthRequest from '../lib/decorator/request';
+import { Employee } from '../lib/model/Employee';
+import { Roles } from '../lib/enum/Role.enum';
 
 export const Create = async (req: Request, res: Response) => {
 	try {
@@ -157,20 +159,41 @@ export const AssignShiftToEmployee = async (req: Request, res: Response) => {
 	}
 };
 
-export const RemoveShiftFromEmployee = async (req: Request, res: Response) => {
+export const RemoveShiftFromEmployee = async (req: AuthRequest, res: Response) => {
 	try {
+		const user = req.user;
 		const id = req.params.id;
 		const { employeeId }: AssignEmployeeDto = req.body;
 
-		const removedShift = await Shift.findByIdAndUpdate(
-			{ _id: id },
-			{
-				$pull: { assignedEmployees: employeeId },
-			},
-			{ new: true }
-		);
+		const profile = await Employee.findById(user?._id).populate({
+			path: 'myEmployees',
+			select: '_id name email phone gender isActive role',
+		});
+		if (user.role === Roles.ADMINISTRATOR) {
+			const removedShift = await Shift.findByIdAndUpdate(
+				{ _id: id },
+				{
+					$pull: { assignedEmployees: employeeId },
+				},
+				{ new: true }
+			);
 
-		res.status(200).json(successResponse(removedShift, 'Removed successfully'));
+			res.status(200).json(successResponse(removedShift, 'Removed successfully'));
+		} else {
+			if (profile?.myEmployees.filter(one => one._id === employeeId).length === 1) {
+				const removedShift = await Shift.findByIdAndUpdate(
+					{ _id: id },
+					{
+						$pull: { assignedEmployees: employeeId },
+					},
+					{ new: true }
+				);
+
+				res.status(200).json(successResponse(removedShift, 'Removed successfully'));
+			} else {
+				return res.status(403).json(errorResponse('Employee is not in your list'));
+			}
+		}
 	} catch (error) {
 		res.status(500).json(errorResponse(error.message || 'Internal server error'));
 	}
