@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  backend-api:
+    build: .
+    container_name: backend-api
+    restart: always
+    ports:
+      - "3020:3020"
+    environment:
+      - DB_URL=mongodb://mongo:27017
+      - SECRET=FDxcz7+72saAFc
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

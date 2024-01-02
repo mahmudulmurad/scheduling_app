@@ -16,12 +16,21 @@ Backend API for [your project name], a [brief description].
 -   [Node.js](https://nodejs.org/)
 -   [npm](https://www.npmjs.com/)
 
-### Installation
+### Run as Docker container
+
+Run the application:
+
+2. Build and run the Docker container:
 
 ```bash
-create .env file as .env.example
-replace username and password and db name as yours
+make build
+make up
+make down
 ```
+
+### Development
+
+Run the application locally:
 
 ```bash
 git clone https://github.com/mahmudulmurad/scheduling_app.git
