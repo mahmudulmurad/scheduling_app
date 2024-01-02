@@ -20,7 +20,7 @@ Backend API for [your project name], a [brief description].
 
 Run the application:
 
-2. Build and run the Docker container:
+Build, Run and Stop the Docker container:
 
 ```bash
 make build
